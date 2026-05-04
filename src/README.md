@@ -5,7 +5,9 @@ A super simple FastAPI application that allows students to view and sign up for 
 ## Features
 
 - View all available extracurricular activities
-- Sign up for activities
+- Teacher-only sign up and unregister actions
+- Admin mode with teacher login/logout from the UI
+- Student-visible participant lists
 
 ## Getting Started
 
@@ -30,7 +32,11 @@ A super simple FastAPI application that allows students to view and sign up for 
 | Method | Endpoint                                                          | Description                                                         |
 | ------ | ----------------------------------------------------------------- | ------------------------------------------------------------------- |
 | GET    | `/activities`                                                     | Get all activities with their details and current participant count |
-| POST   | `/activities/{activity_name}/signup?email=student@mergington.edu` | Sign up for an activity                                             |
+| POST   | `/auth/login`                                                     | Teacher login (returns bearer token)                               |
+| POST   | `/auth/logout`                                                    | Teacher logout (requires bearer token)                             |
+| GET    | `/auth/status`                                                    | Check current auth status for bearer token                         |
+| POST   | `/activities/{activity_name}/signup?email=student@mergington.edu` | Sign up a student (teacher token required)                         |
+| DELETE | `/activities/{activity_name}/unregister?email=student@...`        | Unregister a student (teacher token required)                      |
 
 ## Data Model
 
@@ -48,3 +54,12 @@ The application uses a simple data model with meaningful identifiers:
    - Grade level
 
 All data is stored in memory, which means data will be reset when the server restarts.
+
+## Teacher Credentials
+
+Teacher usernames/passwords are stored in `teachers.json` and validated by the backend.
+
+Default examples:
+
+- `mrs.johnson` / `algebra123`
+- `mr.singh` / `science456`
